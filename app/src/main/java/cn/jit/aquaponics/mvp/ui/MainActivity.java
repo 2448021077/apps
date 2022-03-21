@@ -1,8 +1,10 @@
-package cn.jit.aquaponics;
+package cn.jit.aquaponics.mvp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import cn.jit.aquaponics.R;
 
 public class MainActivity extends AppCompatActivity {
 

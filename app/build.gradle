@@ -1,38 +1,179 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
 }
 
 android {
-    compileSdk 31
-
-    defaultConfig {
-        applicationId "cn.jit.aquaponics"
-        minSdk 21
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
+    compileSdkVersion this.rootProject.android.compileSdkVersion
+    buildToolsVersion this.rootProject.android.buildToolsVersion
+    signingConfigs {
         release {
+            keyAlias 'pdfview'
+            keyPassword 'pdfview'
+            storeFile file('../ks/pdfview.keystore')
+            storePassword 'pdfview'
+        }
+        debug {
+            keyAlias 'pdfview'
+            keyPassword 'pdfview'
+            storeFile file('../ks/pdfview.keystore')
+            storePassword 'pdfview'
+        }
+    }
+    defaultConfig {
+        applicationId this.rootProject.android.applicationId
+        minSdkVersion this.rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+        versionCode this.rootProject.android.versionCode
+        versionName this.rootProject.android.versionName
+        multiDexEnabled this.rootProject.android.multiDexEnabled
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation":
+                                     "$projectDir/schemas".toString()]
+            }
+        }
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a' // 指定要ndk需要兼容的架构(这样其他依赖包里其他so会被过滤掉)
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    buildTypes {
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            zipAlignEnabled true
+        }
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true //移除未使用
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    productFlavors {
+        demotest{}
+    }
+    flavorDimensions "default"
+    android.applicationVariants.all {
+        variant->
+            variant.outputs.all {
+                output->
+                    def outputFile=output.outputFile
+                    if (outputFile!=null && outputFile.name.contains('release')){
+                        variant.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + File.separator + "release_apk")
+                        def  fileName="${variant.productFlavors[0].name}_vc${variant.versionCode}_v${variant.versionName}_${getPkgDate()}.apk"
+                        outputFileName=fileName;
+                    }
+            }
+    }
+}
+
+def getPkgDate() {
+    return new Date().format("MMddHHmm", TimeZone.getTimeZone("Asia/Shanghai"))
 }
 
 dependencies {
 
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation this.rootProject.dpLibrary.appcompatx
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    implementation this.rootProject.dpLibrary.kotlin_stdlib
+    //网络
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    // Rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
+    implementation 'org.reactivestreams:reactive-streams:1.0.3'
+
+    implementation 'com.squareup.retrofit2:converter-jackson:2.0.0-beta4'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+
+    //沉浸式
+    implementation 'com.gyf.immersionbar:immersionbar:2.3.2'
+
+    //androidX
+//    implementation 'com.google.android.material:material:1.0.0'
+    implementation this.rootProject.dpLibrary.materialdesign
+    implementation this.rootProject.dpLibrary.recyclerviewx
+
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.0'
+
+    //数据库room
+    implementation 'androidx.room:room-runtime:2.3.0'
+    annotationProcessor "androidx.room:room-compiler:2.3.0"
+    implementation "androidx.room:room-rxjava2:2.3.0"
+
+    //依赖注入
+    implementation('com.google.dagger:dagger:2.26')
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.26'
+    compileOnly('org.glassfish:javax.annotation:10.0-b28')
+
+//    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45'
+
+    //轮播图 https://github.com/youth5201314/banner
+    implementation 'com.youth.banner:banner:1.4.10'
+
+    //ButterKnife
+    implementation this.rootProject.dpLibrary.butterknife
+    implementation 'org.jetbrains:annotations:15.0'
+    annotationProcessor this.rootProject.dpLibrary.butterknife_compiler
+
+    implementation 'org.greenrobot:eventbus:3.0.0'
+
+    //自定义对话框https://github.com/H07000223/FlycoDialog_Master/
+    implementation 'com.flyco.dialog:FlycoDialog_Lib:1.3.2@aar'
+
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //https://github.com/Justson/AgentWeb 基于WebView问题解决
+    implementation 'com.just.agentweb:agentweb:4.0.2'
+    implementation 'com.just.agentweb:download:4.0.2'
+
+    //加载图片 https://github.com/facebook/fresco
+//    implementation 'com.facebook.fresco:fresco:1.3.0'
+
+    implementation project(':modules:lib_smartrefreshlayout:refresh-footer')
+    implementation project(':modules:lib_smartrefreshlayout:refresh-header')
+    implementation project(':modules:lib_smartrefreshlayout:refresh-layout')
+    implementation project(':modules:lib_smartrefreshlayout:refresh-drawable-path')
+
+    implementation project(':modules:lib_smartrefreshlayout:refresh-layout-kernel')
+    implementation project(':modules:lib_smartrefreshlayout:refresh-header-classics')
+    implementation project(':modules:lib_smartrefreshlayout:refresh-header-material')
+    //没有使用特殊Header，可以不加这行
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
+
+    implementation this.rootProject.dpLibrary.work_runtime
+
+
+    implementation project(':modules:lib_multitypeadapter')
+    implementation project(':modules:lib_xpopup')
+    implementation project(':modules:lib_gallerylayoutx')
+
+    implementation project(':modules:lib_basequickadapter')
+    implementation project(':modules:lib_magicindicator')
+    implementation project(':modules:lib_imagepicker')
+
+    implementation this.rootProject.dpLibrary.picasso
+
+    implementation 'com.github.zhudaihao:livedatbus-master:1.0.1'
 }

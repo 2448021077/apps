@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+
+description = 'path drawables for refresh animations'
+
+android {
+
+    compileSdkVersion rootProject.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    api project(':modules:lib_smartrefreshlayout:refresh-drawable-paint')
+    compileOnly this.rootProject.dpLibrary.appcompatx
+}

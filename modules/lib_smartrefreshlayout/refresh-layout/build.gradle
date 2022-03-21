@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion rootProject.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly this.rootProject.dpLibrary.appcompatx
+
+    compileOnly this.rootProject.dpLibrary.materialdesign
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-layout-kernel')
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-footer-ball')
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-header-falsify')
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-header-radar')
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-header-two-level')
+
+}
+//
+//publish {
+//    userOrg = SMART_USER
+//    groupId = 'com.scwang.smartrefresh'
+//    artifactId = 'SmartRefreshLayout'
+//    publishVersion = SMART_VERSION
+//    desc = 'An intelligent refresh layout'
+//    website = "https://github.com/scwang90/${rootProject.name}"
+//}

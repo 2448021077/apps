@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+
+description = 'the header FalsifyHeader of SmartRefreshLayout'
+
+android {
+    compileSdkVersion rootProject.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly this.rootProject.dpLibrary.appcompatx
+
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-layout-kernel')
+
+}

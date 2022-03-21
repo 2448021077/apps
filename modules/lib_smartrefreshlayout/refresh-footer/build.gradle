@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.novoda.bintray-release'
+
+android {
+
+    compileSdkVersion rootProject.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compileOnly this.rootProject.dpLibrary.appcompatx
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-footer-ball')
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-footer-classics')
+    compileOnly project(':modules:lib_smartrefreshlayout:refresh-layout')
+}
+
+//publish {
+//    userOrg = SMART_USER
+//    groupId = 'com.scwang.smartrefresh'
+//    artifactId = 'SmartRefreshFooter'
+//    publishVersion = SMART_VERSION
+//    desc = 'Some delicate footers of SmartRefreshLayout'
+//    website = "https://github.com/scwang90/${rootProject.name}"
+//}

@@ -1,10 +1,24 @@
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
-    }
-}
-rootProject.name = "Aquaponics"
 include ':app'
+include ':modules:lib_basequickadapter'
+include ':modules:lib_flycotablayout'
+include ':modules:lib_magicindicator'
+include ':modules:lib_multitypeadapter'
+include ':modules:lib_xpopup'
+include ':modules:lib_youthbanner'
+include ':modules:lib_imagepicker'
+include ':modules:lib_gallerylayoutx'
+include ':modules:lib_smartrefreshlayout:refresh-layout'
+include ':modules:lib_smartrefreshlayout:refresh-header'
+include ':modules:lib_smartrefreshlayout:refresh-footer'
+include ':modules:lib_smartrefreshlayout:refresh-drawable-paint'
+include ':modules:lib_smartrefreshlayout:refresh-drawable-path'
+include ':modules:lib_smartrefreshlayout:refresh-layout-kernel'
+include ':modules:lib_smartrefreshlayout:refresh-footer-ball'
+include ':modules:lib_smartrefreshlayout:refresh-footer-classics'
+include ':modules:lib_smartrefreshlayout:refresh-header-classics'
+include ':modules:lib_smartrefreshlayout:refresh-header-falsify'
+include ':modules:lib_smartrefreshlayout:refresh-header-radar'
+include ':modules:lib_smartrefreshlayout:refresh-header-material'
+include ':modules:lib_smartrefreshlayout:refresh-header-two-level'
+
+rootProject.name = 'aqu'
