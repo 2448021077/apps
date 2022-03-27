@@ -131,11 +131,11 @@ public final class LoggingInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Level level = this.level;
         Request request = chain.request();
-        //添加公共参数
+        //登录注册不添加公共参数
         HttpUrl httpUrl = request.url()
                 .newBuilder()
-                .addQueryParameter("app_ver", BuildConfig.VERSION_NAME)
-                .addQueryParameter("token", MyApplication.USER_TOKEN)
+//                .addQueryParameter("app_ver", BuildConfig.VERSION_NAME)
+//                .addQueryParameter("token", MyApplication.USER_TOKEN)
                 .build();
         request = request.newBuilder()
 //                .addHeader("User-Agent",MyApplication.USER_AGENT)

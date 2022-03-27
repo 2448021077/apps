@@ -82,7 +82,7 @@ public class ProjectApi {
         return instance5;
     }
 
-    public Single<String> login(String usr, String pwd) {
+    public Single<String> login(RequestBody usr, RequestBody pwd) {
         return loginApiService.login(usr, pwd);
     }
 }

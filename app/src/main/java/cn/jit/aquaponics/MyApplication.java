@@ -28,4 +28,11 @@ public class MyApplication extends BaseApplication {
     }
 
     public static String USER_TOKEN = "";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        myApplication = this;
+        initComponent();
+    }
 }

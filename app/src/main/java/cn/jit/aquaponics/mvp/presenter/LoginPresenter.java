@@ -11,6 +11,9 @@ import cn.jit.aquaponics.mvp.model.api.ProjectApi;
 import cn.jit.aquaponics.utils.RxThreadUtil;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class LoginPresenter extends RxPresenter<LoginContract.View> implements LoginContract.Presenter {
 
@@ -26,7 +29,14 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
     @Override
     public void loginWith(String usr, String pwd) {
-        Disposable disposable = projectStringApi.login(usr, pwd)
+//        FormBody.Builder builder = new FormBody.Builder();
+//        builder.add("username",usr);
+//        builder.add("password",pwd);
+//        RequestBody requestBody = builder.build();
+//        String usr = "somevalue";
+        RequestBody usrbody = RequestBody.create(MediaType.parse("text/plain"), usr);
+        RequestBody pwdbody = RequestBody.create(MediaType.parse("text/plain"), pwd);
+        Disposable disposable = projectStringApi.login(usrbody, pwdbody)
                 .doOnSuccess(new Consumer<String>() {
 
                     @Override
